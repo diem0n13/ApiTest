@@ -1,0 +1,56 @@
+-- Step 1: Delete existing records
+DELETE FROM [dbo].[Products];
+
+-- Step 2: Allow inserting explicit identity values
+SET IDENTITY_INSERT [dbo].[Products] ON;
+
+-- Step 3: Insert new records
+INSERT INTO [dbo].[Products] ([Id], [Name], [Description], [ImageUrl], [Material], [Gender], [Price], [CategoryId]) VALUES
+(1, N'Doroly', N'Sveston doroly is a gents stainless steel watch having 38mm dial and comes with luxury watch case', N'c83f3c45-9a69-49ea-ac0a-120caea075d9.jpg', N'Steel', N'Male', CAST(799.99 AS Decimal(18, 2)), 1),
+(2, N'Aristos', N'Sveston aristos is a gents stainless-steel watch having 38mm dial and comes with luxury watch case', N'7805c732-7807-4b8f-b10d-0bfc702d3443.jpg', N'Steel', N'Male', CAST(749.99 AS Decimal(18, 2)), 1),
+(3, N'Modicci', N'Sveston modicci is the perfect choice for the modern men, featuring a 39mm stainless steel dial and arriving in a luxury watch case.', N'120efd71-0fdc-4ac8-8170-b1cc9bebacd7.jpg', N'Steel', N'Male', CAST(849.99 AS Decimal(18, 2)), 1),
+(4, N'Aurum', N'Sveston aurum automatic watch for men featuring a 36mm stainless steel design this automatic timepiece effortlessly combines sophistication with functionality it comes in a luxury watch case', N'ea02c06d-7a4f-4806-aa17-9c4d836f7714.jpg', N'Steel', N'Male', CAST(949.99 AS Decimal(18, 2)), 1),
+(5, N'Aeri', N'Sveston Aeri is a chic and modern stainless steel watch designed for women featuring a sleek 29mm dial and elegantly presented in a luxury watch case for a sophisticated touch', N'146c4329-9e66-4c95-a2d0-a883114fe0fc.jpg', N'Steel', N'Female', CAST(649.99 AS Decimal(18, 2)), 1),
+(6, N'Hope', N'Sveston hope is a feminine stainless-steel watch having 21mm dial comes with luxury watch case', N'7bd94c1d-d56f-408e-8d19-2b59558bf95a.jpg', N'Steel', N'Female', CAST(699.99 AS Decimal(18, 2)), 1),
+(7, N'Torque Chain ', N'Torque chain is a stainless-steel smart watch having 21mm dial comes with luxury watch case', N'4015f2c5-748d-42a4-aa12-f80221443549.jpg', N'Steel', N'Male', CAST(499.99 AS Decimal(18, 2)), 2),
+(8, N'Force Pro', N'Force Pro is a  smart watch having 21mm dial comes with rubber straps', N'617e44e2-8607-4c24-996a-84b69d4ccd22.jpg', N'Steel', N'Male', CAST(399.99 AS Decimal(18, 2)), 2),
+(9, N'Maxfit', N'Maxfit smart watch is a  unisex smart watch having 21mm dial comes with rubber straps', N'c22d1bb0-530d-47ad-95be-a628203aa6cc.jpg', N'Steel', N'Unisex', CAST(299.99 AS Decimal(18, 2)), 2),
+(10, N'Valentina', N'Valentina is a  feminine smart watch having 21mm dial comes with rubber straps', N'c751821a-3a5b-47c0-a959-df1e417bb6eb.jpg', N'Steel', N'Female', CAST(249.99 AS Decimal(18, 2)), 2),
+(11, N'Ace', N'Ace smart watch is a  feminine smart watch having 21mm dial comes with rubber straps', N'4d78d7d9-0212-431d-9849-4d6b7a722dc1.jpg', N'Steel', N'Female', CAST(349.99 AS Decimal(18, 2)), 2),
+(12, N'Favous', N'The Sveston Favous is a distinguished men''s watch, featuring a 46mm dial and a genuine leather strap. It comes presented in a luxurious watch case', N'6c742a50-3a6a-4ffb-b274-3fbecb0a01d2.jpg', N'Steel', N'Male', CAST(899.99 AS Decimal(18, 2)), 3),
+(13, N'Highlight', N'The Sveston Highlight is a sophisticated men''s stainless steel watch, featuring a 41mm dial and presented in a luxury watch case.', N'8f35477e-36f1-4700-aa40-5c7292501fb4.jpg', N'Steel', N'Male', CAST(999.99 AS Decimal(18, 2)), 3),
+(14, N'Vanesio', N'The Sveston Vanesio is a sophisticated men''s stainless steel watch, featuring a 39mm dial and dual time functionality. It comes presented in a matching stainless steel watch case.', N'f81ce64b-ad50-47a3-af75-6edc1b1b869d.jpg', N'Steel', N'Male', CAST(999.99 AS Decimal(18, 2)), 3),
+(15, N'Diesel', N'The Sveston Diesel is a robust men''s stainless steel watch, featuring a 41mm dial and practical dual time functionality. It comes presented in a matching stainless steel watch case.', N'c86adbbe-96f2-4904-887b-0db3a5d40f89.jpg', N'Steel', N'Male', CAST(799.99 AS Decimal(18, 2)), 3),
+(16, N'Spectrum', N'The Sveston Spectrum is a sophisticated men''s gold watch, featuring a 41mm dial and presented in a matching titanium watch case.', N'db056207-bcfb-4c05-b2c9-678fd9ae9ccc.jpg', N'Gold', N'Male', CAST(999.99 AS Decimal(18, 2)), 4),
+(17, N'Wondrous', N'The Sveston Wondrous is a sophisticated men''s platinum watch, featuring a 37mm dial and practical dual time functionality. It comes presented in a matching stainless steel watch case.', N'02217dda-2723-447f-a96a-ca06f63f39d6.jpg', N'Platinum', N'Male', CAST(999.99 AS Decimal(18, 2)), 4),
+(18, N'Chrono', N'The Sveston Chrono 1.0 is a high-performance gold watch for men, featuring a 34mm dial. It''s designed for those who seek both elegance and functionality.', N'7c7ef13f-2174-4b74-8704-ab88ff22641c.jpg', N'Gold', N'Male', CAST(999.99 AS Decimal(18, 2)), 4),
+(19, N'Ironman', N'Sveston Ironman is designed for the contemporary man, boasting a 37mm stainless steel dial and presented in a luxury watch case', N'116edfec-8d81-455a-a147-c92b8aaeba03.jpg', N'Steel', N'Male', CAST(899.99 AS Decimal(18, 2)), 4),
+(20, N'Royal', N'The Sveston Royal is the perfect choice for the modern man, featuring a bronze dial and presented in a luxury watch case.', N'cc710219-18f5-403c-87b7-0f60c3ae4fc0.jpg', N'Bronze', N'Male', CAST(599.99 AS Decimal(18, 2)), 4);
+
+-- Step 4: Turn identity insert back off
+SET IDENTITY_INSERT [dbo].[Products] OFF;
+
+-- Step 1: Delete existing records
+DELETE FROM [Products];
+
+INSERT INTO Products (Id, Name, Description, ImageUrl, Material, Gender, Price, CategoryId) VALUES 
+(1, 'Doroly', 'Sveston doroly is a gents stainless steel watch having 38mm dial and comes with luxury watch case', 'c83f3c45-9a69-49ea-ac0a-120caea075d9.jpg', 'Steel', 'Male', 799.99, 1 ),
+(2, 'Aristos', 'Sveston aristos is a gents stainless-steel watch having 38mm dial and comes with luxury watch case', '7805c732-7807-4b8f-b10d-0bfc702d3443.jpg', 'Steel', 'Male', 749.99 , 1),
+(3, 'Modicci', 'Sveston modicci is the perfect choice for the modern men, featuring a 39mm stainless steel dial and arriving in a luxury watch case.', '120efd71-0fdc-4ac8-8170-b1cc9bebacd7.jpg', 'Steel', 'Male', 849.99, 1),
+(4, 'Aurum', 'Sveston aurum automatic watch for men featuring a 36mm stainless steel design this automatic timepiece effortlessly combines sophistication with functionality it comes in a luxury watch case', 'ea02c06d-7a4f-4806-aa17-9c4d836f7714.jpg', 'Steel', 'Male', 949.99, 1),
+(5, 'Aeri', 'Sveston Aeri is a chic and modern stainless steel watch designed for women featuring a sleek 29mm dial and elegantly presented in a luxury watch case for a sophisticated touch', '146c4329-9e66-4c95-a2d0-a883114fe0fc.jpg', 'Steel', 'Female', 649.99, 1),
+(6, 'Hope', 'Sveston hope is a feminine stainless-steel watch having 21mm dial comes with luxury watch case', '7bd94c1d-d56f-408e-8d19-2b59558bf95a.jpg', 'Steel', 'Female', 699.99, 1),
+(7, 'Torque Chain ', 'Torque chain is a stainless-steel smart watch having 21mm dial comes with luxury watch case', '4015f2c5-748d-42a4-aa12-f80221443549.jpg', 'Steel', 'Male', 499.99, 2),
+(8, 'Force Pro', 'Force Pro is a  smart watch having 21mm dial comes with rubber straps', '617e44e2-8607-4c24-996a-84b69d4ccd22.jpg', 'Steel', 'Male', 399.99, 2),
+(9, 'Maxfit', 'Maxfit smart watch is a  unisex smart watch having 21mm dial comes with rubber straps', 'c22d1bb0-530d-47ad-95be-a628203aa6cc.jpg', 'Steel', 'Unisex', 299.99, 2),
+(10, 'Valentina', 'Valentina is a  feminine smart watch having 21mm dial comes with rubber straps', 'c751821a-3a5b-47c0-a959-df1e417bb6eb.jpg', 'Steel', 'Female', 249.99, 2),
+(11, 'Ace', 'Ace smart watch is a  feminine smart watch having 21mm dial comes with rubber straps', '4d78d7d9-0212-431d-9849-4d6b7a722dc1.jpg', 'Steel', 'Female', 349.99, 2),
+(12, 'Favous', 'The Sveston Favous is a distinguished men''s watch, featuring a 46mm dial and a genuine leather strap. It comes presented in a luxurious watch case', '6c742a50-3a6a-4ffb-b274-3fbecb0a01d2.jpg', 'Steel', 'Male', 899.99, 3),
+(13, 'Highlight', 'The Sveston Highlight is a sophisticated men''s stainless steel watch, featuring a 41mm dial and presented in a luxury watch case.', '8f35477e-36f1-4700-aa40-5c7292501fb4.jpg', 'Steel', 'Male', 999.99, 3),
+(14, 'Vanesio', 'The Sveston Vanesio is a sophisticated men''s stainless steel watch, featuring a 39mm dial and dual time functionality. It comes presented in a matching stainless steel watch case.', 'f81ce64b-ad50-47a3-af75-6edc1b1b869d.jpg', 'Steel', 'Male', 999.99, 3),
+(15, 'Diesel', 'The Sveston Diesel is a robust men''s stainless steel watch, featuring a 41mm dial and practical dual time functionality. It comes presented in a matching stainless steel watch case.', 'c86adbbe-96f2-4904-887b-0db3a5d40f89.jpg', 'Steel', 'Male', 799.99, 3),
+(16, 'Spectrum', 'The Sveston Spectrum is a sophisticated men''s gold watch, featuring a 41mm dial and presented in a matching titanium watch case.', 'db056207-bcfb-4c05-b2c9-678fd9ae9ccc.jpg', 'Gold', 'Male', 999.99, 4),
+(17, 'Wondrous', 'The Sveston Wondrous is a sophisticated men''s platinum watch, featuring a 37mm dial and practical dual time functionality. It comes presented in a matching stainless steel watch case.', '02217dda-2723-447f-a96a-ca06f63f39d6.jpg', 'Platinum', 'Male', 999.99, 4),
+(18, 'Chrono', 'The Sveston Chrono 1.0 is a high-performance gold watch for men, featuring a 34mm dial. It''s designed for those who seek both elegance and functionality.', '7c7ef13f-2174-4b74-8704-ab88ff22641c.jpg', 'Gold', 'Male', 999.99, 4),
+(19, 'Ironman', 'Sveston Ironman is designed for the contemporary man, boasting a 37mm stainless steel dial and presented in a luxury watch case', '116edfec-8d81-455a-a147-c92b8aaeba03.jpg', 'Steel', 'Male', 899.99, 4),
+(20, 'Royal', 'The Sveston Royal is the perfect choice for the modern man, featuring a bronze dial and presented in a luxury watch case.', 'cc710219-18f5-403c-87b7-0f60c3ae4fc0.jpg', 'Bronze', 'Male', 599.99, 4);
