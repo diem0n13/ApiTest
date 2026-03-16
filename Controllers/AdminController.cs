@@ -1,37 +1,36 @@
-﻿using System;
-using Course.Data;
+﻿using Course.Data;
+using Course.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Course.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class AdminController(ApiDbContext dbContext,IAccount accountService) : ControllerBase
     {
-        private ApiDbContext _dbContext;
-        public AdminController(ApiDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
         [Authorize(Roles = "Admin")]
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetAdminDashboardSumary()
         {
-            var totalOrders = await _dbContext.Orders.CountAsync();
-            var pendingOrders = await _dbContext.Orders.CountAsync(x=>x.Status.Equals("Pending"));
-            var totalRevenue = await _dbContext.Orders.Where(x=>x.Status.Equals("completed")).SumAsync(x=>(double?)x.TotalAmount ?? 0);
-            var totalProducts = await _dbContext.Products.CountAsync();
-            var totalCategories = await _dbContext.Categories.CountAsync();
+
+            var res = await accountService.GetAdminDashboardSummary();
+            if(res!=null)
+                return Ok(res);
+            
+            var totalOrders = await dbContext.Orders.CountAsync();
+            var pendingOrders = await dbContext.Orders.CountAsync(x => x.Status.Equals("Pending"));
+            var totalRevenue = await dbContext.Orders.Where(x => x.Status.Equals("completed"))
+                .SumAsync(x => (double?)x.TotalAmount ?? 0);
+            var totalProducts = await dbContext.Products.CountAsync();
+            var totalCategories = await dbContext.Categories.CountAsync();
 
             var result = new
             {
-                TotalOrders  = totalOrders,
+                TotalOrders = totalOrders,
                 PendingOrders = pendingOrders,
                 TotalRevenue = totalRevenue,
                 TotalProducts = totalProducts,
@@ -43,7 +42,7 @@ namespace Course.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("revenue")]
-        public async Task<IActionResult> GetRevenue([FromQuery] string range = "monthly")//weekly, yearly
+        public async Task<IActionResult> GetRevenue([FromQuery] string range = "monthly") //weekly, yearly
         {
             var now = DateTime.UtcNow;
             var result = new List<object>();
@@ -78,7 +77,9 @@ namespace Course.Controllers
                 }
 
                 //decimal revanue = await _dbContext.Orders.Where(x=>x.Status.Equals("completed") && x.OrderDate >= start && x.OrderDate < end).SumAsync(x=>(double?)x.TotalAmount) ?? 0;
-                double value = await _dbContext.Orders.Where(x => x.Status.Equals("completed") && x.OrderDate >= start && x.OrderDate < end).SumAsync(x => (double?)x.TotalAmount) ?? 0;
+                double value = await dbContext.Orders
+                    .Where(x => x.Status.Equals("completed") && x.OrderDate >= start && x.OrderDate < end)
+                    .SumAsync(x => (double?)x.TotalAmount) ?? 0;
                 //long revenue = await _dbContext.Orders.Where(...).SumAsync(x => x.TotalAmount);
                 //decimal result = revenue / 100m;
                 decimal revanue = (decimal)value;

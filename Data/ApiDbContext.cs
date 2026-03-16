@@ -1,79 +1,99 @@
 ﻿using Course.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Course.Data
 {
-    public class ApiDbContext : DbContext
+    public class ApiDbContext(DbContextOptions<ApiDbContext> options) : IdentityDbContext<User>(options)
     {
-        public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
-        { 
-        }
-        
+
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<Product>(e =>
+            {
+                e.HasKey(p => p.Id);
+                e.Property(p => p.Name).HasMaxLength(255);
+                e.Property(p => p.Description).HasMaxLength(255);
+                e.Property(p => p.ImageUrl).HasMaxLength(255);
+
+            });
+
+
+
+        }
     }
-    /*
-     Refresh Token (как в production)
+}
+
+
+
+
+/*
+ Refresh Token (как в production)
 Access Token — живёт 5–15 минут
 Refresh Token — живёт 7–30 дней
 когда access истёк → клиент отправляет refresh → получает новый access
 Шаг 1. Модель RefreshToken
 public class RefreshToken
 {
-    public int Id { get; set; }
-    public string Token { get; set; }
-    public DateTime Expires { get; set; }
-    public int UserId { get; set; }
+public int Id { get; set; }
+public string Token { get; set; }
+public DateTime Expires { get; set; }
+public int UserId { get; set; }
 }Добавить в DbContext.
 
 Шаг 2. Генерация Refresh Token
 private string GenerateRefreshToken()
 {
-    var randomBytes = new byte[64];
+var randomBytes = new byte[64];
 
-    using var rng = RandomNumberGenerator.Create();
-    rng.GetBytes(randomBytes);
+using var rng = RandomNumberGenerator.Create();
+rng.GetBytes(randomBytes);
 
-    return Convert.ToBase64String(randomBytes);
+return Convert.ToBase64String(randomBytes);
 }
 
 Шаг 3. Возвращать 2 токена при Login
 var refreshToken = GenerateRefreshToken()
 _dbContext.RefreshTokens.Add(new RefreshToken
 {
-    Token = refreshToken,
-    UserId = currentUser.Id,
-    Expires = DateTime.Now.AddDays(30)
+Token = refreshToken,
+UserId = currentUser.Id,
+Expires = DateTime.Now.AddDays(30)
 });
 await _dbContext.SaveChangesAsync();
 return Ok(new
 {
-    access_token = jwt,
-    refresh_token = refreshToken
+access_token = jwt,
+refresh_token = refreshToken
 });
 
 Шаг 4. Endpoint обновления токена
 [HttpPost("refresh")]
 public async Task<IActionResult> Refresh(string refreshToken)
 {
-    var token = await _dbContext.RefreshTokens
-        .FirstOrDefaultAsync(x => x.Token == refreshToken);
+var token = await _dbContext.RefreshTokens
+    .FirstOrDefaultAsync(x => x.Token == refreshToken);
 
-    if (token == null || token.Expires < DateTime.Now)
-        return Unauthorized();
+if (token == null || token.Expires < DateTime.Now)
+    return Unauthorized();
 
-    var user = await _dbContext.Users.FindAsync(token.UserId);
+var user = await _dbContext.Users.FindAsync(token.UserId);
 
-    var newJwt = GenerateJwt(user);
+var newJwt = GenerateJwt(user);
 
-    return Ok(new
-    {
-        access_token = newJwt
-    });
+return Ok(new
+{
+    access_token = newJwt
+});
 }
 
 *Получать UserId автоматически
@@ -84,24 +104,24 @@ using System.Security.Claims;
 
 public static class UserExtensions
 {
-    public static int GetUserId(this ClaimsPrincipal user)
-    {
-        return int.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
-    }
+public static int GetUserId(this ClaimsPrincipal user)
+{
+    return int.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
+}
 }
 
 Теперь в любом контроллере:
 var userId = User.GetUserId();
 
-    Глобальная авторизация на весь API Чтобы не писать [Authorize] на каждом контроллере.
+Глобальная авторизация на весь API Чтобы не писать [Authorize] на каждом контроллере.
 В Program.cs:
 builder.Services.AddControllers(options =>
 {
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
+var policy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .Build();
 
-    options.Filters.Add(new AuthorizeFilter(policy));
+options.Filters.Add(new AuthorizeFilter(policy));
 });
 Теперь весь API защищён.
 Если endpoint должен быть публичным Используй:
@@ -142,4 +162,4 @@ rotation refresh token
 revoke token
 logout
 blacklist токенов*/
-}
+

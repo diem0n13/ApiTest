@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using Course.Data;
 using Course.Models;
+using Course.RequestsModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,22 +23,30 @@ namespace Course.Controllers
             _dbContext = dbContext;
             _configuration = configuration;
         }
+        
+        [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] User user)
+        public async Task<IActionResult> Register([FromBody] UserRegistrRequest model)
         {
-            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
-            if (existingUser != null)
+            if (ModelState.IsValid)
             {
-                return BadRequest("User with same email exist..");
-            }
-
-            var passHasher = new PasswordHasher<User>();
-            user.PasswordHash = passHasher.HashPassword(user, user.PasswordHash);
-
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+                
+            }           
+            
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            // var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            // if (existingUser != null)
+            // {
+            //     return BadRequest("User with same email exist..");
+            // }
+            //
+            // var passHasher = new PasswordHasher<User>();
+            // user.PasswordHash = passHasher.HashPassword(user, user.PasswordHash);
+            //
+              _dbContext.Users.Add(user);
+             await _dbContext.SaveChangesAsync();
+            
             return StatusCode(StatusCodes.Status201Created);
         }
 
@@ -59,15 +69,17 @@ namespace Course.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, request.Email),
-                //new Claim(ClaimTypes.NameIdentifier, currentUser.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, currentUser.Id.ToString()),
                 new Claim(ClaimTypes.Role, currentUser.Role)
             };
             var token = new JwtSecurityToken(issuer: _configuration["Jwt:Issuer"], audience: _configuration["Jwt:Audience"], claims: claims,
                 expires: DateTime.Now.AddDays(60), signingCredentials: credentials);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok();
             return new ObjectResult(new
             {
-                access_token = jwt,
+                accessToken = jwt,
                 token_type = "bearer",
                 user_id = currentUser.Id,
                 user_name = currentUser.Name
